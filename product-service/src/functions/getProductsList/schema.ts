@@ -1,7 +1,7 @@
 export default {
-  type: "object",
+  type: 'object',
   properties: {
-    data: { type: 'array' }
+    data: { type: 'array' },
   },
   required: ['data'],
 } as const;

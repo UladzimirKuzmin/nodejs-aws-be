@@ -10,6 +10,6 @@ const getProductsList: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async
   return formatJSONResponse({
     data: [],
   });
-}
+};
 
 export const main = middyfy(getProductsList);

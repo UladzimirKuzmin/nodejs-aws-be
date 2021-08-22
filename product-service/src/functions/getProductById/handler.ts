@@ -6,10 +6,11 @@ import { middyfy } from '@libs/lambda';
 
 import schema from './schema';
 
-const getProductById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () => {
+const getProductById: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+  const { id } = event.pathParameters;
   return formatJSONResponse({
-    id: 1,
+    id,
   });
-}
+};
 
 export const main = middyfy(getProductById);
