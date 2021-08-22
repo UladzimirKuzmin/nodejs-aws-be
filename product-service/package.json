@@ -13,6 +13,7 @@
     "@middy/core": "^1.5.2",
     "@middy/http-cors": "^2.5.1",
     "@middy/http-json-body-parser": "^1.5.2",
+    "aws-sdk": "^2.973.0",
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
