@@ -41,6 +41,13 @@
   dependencies:
     once "^1.4.0"
 
+"@middy/http-cors@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@middy/http-cors/-/http-cors-2.5.1.tgz#1b68d393f04e79748a18e9195cf67fc4c5566041"
+  integrity sha512-s/rGRxfRNzeuj+V7hfdwEBwtUG4FgDq/PZAEDhmxLtp/hWZy8R0ZcCsOlZnvQhkMuO1itvq6IzgFYk8X+1o/Ow==
+  dependencies:
+    "@middy/util" "^2.5.1"
+
 "@middy/http-json-body-parser@^1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@middy/http-json-body-parser/-/http-json-body-parser-1.5.2.tgz#0b59f3f60f67ef74788668a371ddf3b050982b4b"
@@ -49,6 +56,11 @@
     "@types/http-errors" "^1.6.1"
     content-type "^1.0.4"
     http-errors "^1.6.3"
+
+"@middy/util@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@middy/util/-/util-2.5.1.tgz#35987a2217cfcefe018650b5f84e78dc4ccacbdc"
+  integrity sha512-Tpx97CpE2GlgDdaCav+IZzEV2dSmb4hJj57r1xIOiRctYyYYhS6o4jOjfLBWAcDxbWs0WZb/kvv58p0O+1hRqw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
