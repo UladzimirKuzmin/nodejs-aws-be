@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as AWSMock from 'jest-aws-sdk-mock';
+import * as AWSMock from 'aws-sdk-mock';
 import context from 'aws-lambda-mock-context';
 import { Callback } from 'aws-lambda';
 import { main as getProductById } from './handler';
