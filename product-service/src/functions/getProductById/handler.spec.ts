@@ -8,7 +8,7 @@ import mock from './mock.json';
 
 AWSMock.mock('S3', 'getObject', Buffer.from(fs.readFileSync(`${__dirname}/mock.json`, 'utf-8')));
 
-const event = { pathParameters: { id: '1' } };
+const event = { pathParameters: { id: '1580' } };
 const ctx = context();
 const callback: Callback = () => {};
 
@@ -24,6 +24,7 @@ describe('getProductsList', () => {
 
   test('Returns product object in body', async () => {
     const result = await getProductById(event, ctx, callback);
+    console.log(result);
     expect(result).toEqual({ statusCode: 200, body: JSON.stringify(mock) });
   });
 });
