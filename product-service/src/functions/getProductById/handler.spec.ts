@@ -4,7 +4,7 @@ import context from 'aws-lambda-mock-context';
 import { Callback } from 'aws-lambda';
 import { main as getProductById } from './handler';
 
-import * as mock from './mock.json';
+import mock from './mock.json';
 
 AWSMock.mock('S3', 'getObject', Buffer.from(fs.readFileSync(`${__dirname}/mock.json`, 'utf-8')));
 
