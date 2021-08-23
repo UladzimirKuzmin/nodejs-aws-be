@@ -5,12 +5,16 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
 const getProductsList = async () => {
-  const json = await getProductsMock();
-  const products = JSON.parse(json);
+  try {
+    const json = await getProductsMock();
+    const products = JSON.parse(json);
 
-  return formatJSONResponse({
-    data: products?.data,
-  });
+    return formatJSONResponse({
+      data: products?.data,
+    });
+  } catch (error) {
+    return error;
+  }
 };
 
 export const main = middyfy(getProductsList);
