@@ -16,9 +16,9 @@ const callback: Callback = () => {};
 describe('getProductsList', () => {
   (getProductsMock as jest.Mock).mockResolvedValue(JSON.stringify({ data: [mock] }));
 
-  test('Returns empty object in body', async () => {
+  test('Returns statusCode 404', async () => {
     const result = await getProductById({ pathParameters: { id: '999' } }, ctx, callback);
-    expect(result).toEqual({ statusCode: 200, body: JSON.stringify({}) });
+    expect(result).toEqual({ statusCode: 404 });
   });
 
   test('Returns product object in body', async () => {
