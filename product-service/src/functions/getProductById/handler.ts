@@ -19,7 +19,7 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
       return format404Response();
     }
 
-    return formatJSONResponse(product ?? {});
+    return formatJSONResponse(product);
   } catch (error) {
     return error;
   }
