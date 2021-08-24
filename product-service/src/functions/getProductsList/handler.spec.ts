@@ -14,6 +14,12 @@ const ctx = context();
 const callback: Callback = () => {};
 
 describe('getProductsList', () => {
+  test('Returns empty array', async () => {
+    (getProductsMock as jest.Mock).mockResolvedValue(JSON.stringify({ data: [] }));
+    const result = await getProductsList(event, ctx, callback);
+    expect(result).toEqual({ statusCode: 200, body: JSON.stringify({ data: [] }) });
+  });
+
   test('Returns array of products', async () => {
     (getProductsMock as jest.Mock).mockResolvedValue(JSON.stringify(mock));
     const result = await getProductsList(event, ctx, callback);
