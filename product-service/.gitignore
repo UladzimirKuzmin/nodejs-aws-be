@@ -8,5 +8,8 @@ jspm_packages
 # Webpack directories
 .webpack
 
+# Node env
+.env
+
 # Jest
 coverage
