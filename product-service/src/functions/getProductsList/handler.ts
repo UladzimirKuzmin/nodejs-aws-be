@@ -1,20 +1,23 @@
 import 'source-map-support/register';
 
-import { getProductsMock } from '@libs/s3';
+import { connect } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { Product } from '@models/product';
 
 const getProductsList = async () => {
+  const client = await connect();
+
   try {
-    const json = await getProductsMock();
-    const products = JSON.parse(json) as { data: Product[] };
+    const products = await client.query<Product>(`select * from products`);
 
     return formatJSONResponse({
-      data: products?.data,
+      data: products.rows,
     });
   } catch (error) {
-    return error;
+    return `Server failed with the following error: ${error}`;
+  } finally {
+    client.end();
   }
 };
 
