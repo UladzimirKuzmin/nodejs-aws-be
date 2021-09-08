@@ -17,18 +17,18 @@ const addProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (
 
     await client.query('BEGIN');
 
-    const id = await client.query(
+    await client.query(
       `INSERT INTO
        products (title, description, price)
-       VALUES ('${title}', '${description}', ${price})
-       RETURNING id`,
+       VALUES ('${title}', '${description}', '${price}'::int)`,
     );
 
+    const result = await client.query(`SELECT * FROM products WHERE title = '${title}'`);
+
     await client.query(
-      `INSERT INTO 
+      `INSERT INTO
        stocks (product_id, count)
-       VALUES ($1, $2)`,
-      [id, count],
+       VALUES ('${result.rows[0].id}', '${count}'::int)`,
     );
 
     const product = await client.query<Product>(
@@ -36,7 +36,7 @@ const addProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (
        FROM products
        LEFT JOIN stocks ON products.id = stocks.product_id 
        WHERE products.id = $1`,
-      [id],
+      [result.rows[0].id],
     );
 
     await client.query('COMMIT');
