@@ -1,6 +1,7 @@
 import 'source-map-support/register';
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import { Client } from 'pg';
 import { connect } from '@libs/db';
 import { formatJSONResponse, format404Response } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
@@ -8,9 +9,11 @@ import { Product } from '@models/product';
 
 const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
   const { id } = event.pathParameters;
-  const client = await connect();
+  let client: Client;
 
   try {
+    client = await connect();
+
     const product = await client.query<Product>(
       `SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON products.id = stocks.product_id WHERE id = $1`,
       [id],
@@ -24,7 +27,7 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
   } catch (error) {
     return error;
   } finally {
-    client.end();
+    await client.end();
   }
 };
 

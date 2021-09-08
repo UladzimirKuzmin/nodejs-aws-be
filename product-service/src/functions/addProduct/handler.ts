@@ -5,21 +5,19 @@ import { Client } from 'pg';
 import { connect } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { Product } from '@models/product';
+// import { Product } from '@models/product';
 
-const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async () => {
+const addProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  const { title, description, price, count } = JSON.parse(event.body);
+
   let client: Client;
 
   try {
     client = await connect();
 
-    const products = await client.query<Product>(
-      `SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON products.id = stocks.product_id`,
-    );
+    console.log(title, description, price, count);
 
-    return formatJSONResponse({
-      data: products.rows,
-    });
+    return formatJSONResponse({});
   } catch (error) {
     return error;
   } finally {
@@ -27,4 +25,4 @@ const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = as
   }
 };
 
-export const main = middyfy(getProductsList);
+export const main = middyfy(addProduct);
