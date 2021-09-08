@@ -11,15 +11,16 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
   const client = await connect();
 
   try {
-    //TODO: select product by id from db using query
-    const products = await client.query<Product>(`select * from products`);
-    const product = products?.rows.find((entry) => entry.id === id);
+    const product = await client.query<Product>(
+      `SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON products.id = stocks.product_id WHERE id = $1`,
+      [id],
+    );
 
-    if (!product) {
+    if (!product.rows.length) {
       return format404Response();
     }
 
-    return formatJSONResponse(product);
+    return formatJSONResponse(product.rows[0]);
   } catch (error) {
     return error;
   } finally {
