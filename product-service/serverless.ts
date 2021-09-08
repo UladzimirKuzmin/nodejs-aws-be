@@ -5,6 +5,7 @@ config();
 
 import getProductsList from '@functions/getProductsList';
 import getProductById from '@functions/getProductById';
+import addProduct from '@functions/addProduct';
 
 const serverlessConfiguration: AWS = {
   service: 'product-service',
@@ -36,7 +37,7 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  functions: { getProductsList, getProductById },
+  functions: { getProductsList, getProductById, addProduct },
 };
 
 module.exports = serverlessConfiguration;

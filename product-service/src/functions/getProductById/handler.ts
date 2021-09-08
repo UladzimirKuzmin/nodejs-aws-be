@@ -15,7 +15,10 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
     client = await connect();
 
     const product = await client.query<Product>(
-      `SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON products.id = stocks.product_id WHERE id = $1`,
+      `SELECT id, title, description, price, count
+      FROM products
+      LEFT JOIN stocks ON products.id = stocks.product_id
+      WHERE products.id = $1`,
       [id],
     );
 

@@ -14,7 +14,9 @@ const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = as
     client = await connect();
 
     const products = await client.query<Product>(
-      `SELECT id, title, description, price, count FROM products LEFT JOIN stocks ON products.id = stocks.product_id`,
+      `SELECT id, title, description, price, count
+      FROM products
+      LEFT JOIN stocks ON products.id = stocks.product_id`,
     );
 
     return formatJSONResponse({
