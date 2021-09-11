@@ -12,7 +12,7 @@ export const validate = ({
   if (!description || typeof description !== 'string') {
     return { error: { message: '"description" is invalid' } };
   }
-  if (price === null || price === undefined || typeof price !== 'number') {
+  if (price === null || price === undefined || typeof price !== 'number' || price < 0) {
     return { error: { message: '"price" is invalid' } };
   }
   if (count === null || count === undefined || typeof count !== 'number' || count < 1) {
