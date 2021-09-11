@@ -1,6 +1,11 @@
 import { ProductWithStock } from '@models/product';
 
-export const validate = ({ title, description, price, count }: ProductWithStock) => {
+export const validate = ({
+  title,
+  description,
+  price,
+  count,
+}: ProductWithStock): { error?: { message: string } } => {
   if (!title || typeof title !== 'string') {
     return { error: { message: '"title" is invalid' } };
   }
