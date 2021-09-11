@@ -3,11 +3,12 @@ import 'source-map-support/register';
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 import { Client } from 'pg';
 import { dbOptions } from '@libs/db';
-import { formatJSONResponse, format404Response } from '@libs/apiGateway';
+import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { Product } from '@models/product';
+import { ProductWithStock } from '@models/product';
 
 const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  console.info(event);
   const { id } = event.pathParameters;
 
   const client = new Client(dbOptions);
@@ -15,7 +16,7 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
   try {
     await client.connect();
 
-    const product = await client.query<Product>(
+    const product = await client.query<ProductWithStock>(
       `SELECT id, title, description, price, count
       FROM products
       LEFT JOIN stocks ON products.id = stocks.product_id
@@ -24,14 +25,14 @@ const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = asy
     );
 
     if (!product.rows.length) {
-      return format404Response();
+      return formatJSONResponse({ message: 'Product not found' }, 404);
     }
 
     return formatJSONResponse(product.rows[0]);
   } catch (error) {
-    return error;
+    return formatJSONResponse(error, 500);
   } finally {
-    await client.end();
+    client.end();
   }
 };
 

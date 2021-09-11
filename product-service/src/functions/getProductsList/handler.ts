@@ -5,15 +5,16 @@ import { Client } from 'pg';
 import { dbOptions } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { Product } from '@models/product';
+import { ProductWithStock } from '@models/product';
 
 const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  console.info(event);
   const client = new Client(dbOptions);
 
   try {
     await client.connect();
 
-    const products = await client.query<Product>(
+    const products = await client.query<ProductWithStock>(
       `SELECT id, title, description, price, count
       FROM products
       LEFT JOIN stocks ON products.id = stocks.product_id`,
@@ -23,7 +24,7 @@ const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = as
       data: products.rows,
     });
   } catch (error) {
-    return error;
+    return formatJSONResponse(error, 500);
   } finally {
     client.end();
   }
