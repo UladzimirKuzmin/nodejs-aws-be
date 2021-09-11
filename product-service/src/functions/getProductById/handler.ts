@@ -2,17 +2,18 @@ import 'source-map-support/register';
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 import { Client } from 'pg';
-import { connect } from '@libs/db';
+import { dbOptions } from '@libs/db';
 import { formatJSONResponse, format404Response } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { Product } from '@models/product';
 
 const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
   const { id } = event.pathParameters;
-  let client: Client;
+
+  const client = new Client(dbOptions);
 
   try {
-    client = await connect();
+    await client.connect();
 
     const product = await client.query<Product>(
       `SELECT id, title, description, price, count

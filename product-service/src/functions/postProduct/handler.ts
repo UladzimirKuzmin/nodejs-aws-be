@@ -2,32 +2,36 @@ import 'source-map-support/register';
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 import { Client } from 'pg';
-import { connect } from '@libs/db';
+import { dbOptions } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { Product } from '@models/product';
 
-const addProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
-  const { title, description, price, count } = JSON.parse(event.body);
+interface BodyRequest {
+  title: string;
+  description: string;
+  price: number;
+  count: number;
+}
 
-  let client: Client;
+const postProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  const { title, description, price, count } = event.body as unknown as BodyRequest;
+
+  const client = new Client(dbOptions);
 
   try {
-    client = await connect();
-
+    await client.connect();
     await client.query('BEGIN');
 
     await client.query(
-      `INSERT INTO
-       products (title, description, price)
+      `INSERT INTO products (title, description, price)
        VALUES ('${title}', '${description}', '${price}'::int)`,
     );
 
     const result = await client.query(`SELECT * FROM products WHERE title = '${title}'`);
 
     await client.query(
-      `INSERT INTO
-       stocks (product_id, count)
+      `INSERT INTO stocks (product_id, count)
        VALUES ('${result.rows[0].id}', '${count}'::int)`,
     );
 
@@ -50,4 +54,4 @@ const addProduct: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (
   }
 };
 
-export const main = middyfy(addProduct);
+export const main = middyfy(postProduct);
