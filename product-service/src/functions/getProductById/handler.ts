@@ -1,27 +1,38 @@
 import 'source-map-support/register';
 
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
-import { getProductsMock } from '@libs/s3';
-import { formatJSONResponse, format404Response } from '@libs/apiGateway';
+import { Client } from 'pg';
+import { dbOptions } from '@libs/db';
+import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { Product } from '@models/product';
+import { ProductWithStock } from '@models/product';
 
 const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  console.info(event);
+  const { id } = event.pathParameters;
+
+  const client = new Client(dbOptions);
+
   try {
-    const { id } = event.pathParameters;
+    await client.connect();
 
-    const json = await getProductsMock();
-    const products = JSON.parse(json) as { data: Product[] };
+    const product = await client.query<ProductWithStock>(
+      `SELECT id, title, description, price, count
+      FROM products
+      LEFT JOIN stocks ON products.id = stocks.product_id
+      WHERE products.id = $1`,
+      [id],
+    );
 
-    const product = products?.data.find((entry) => entry.id === Number(id));
-
-    if (!product) {
-      return format404Response();
+    if (!product.rows.length) {
+      return formatJSONResponse({ message: 'Product not found' }, 404);
     }
 
-    return formatJSONResponse(product);
+    return formatJSONResponse(product.rows[0]);
   } catch (error) {
-    return error;
+    return formatJSONResponse(error, 500);
+  } finally {
+    client.end();
   }
 };
 

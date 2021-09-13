@@ -1,6 +1,10 @@
+import { Stock } from './stock';
+
 export type Product = {
-  id: number;
+  id: string;
   title: string;
   description: string;
-  price?: number;
+  price: number;
 };
+
+export type ProductWithStock = Product & Stock;

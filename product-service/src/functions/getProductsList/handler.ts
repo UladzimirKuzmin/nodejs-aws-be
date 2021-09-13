@@ -1,20 +1,32 @@
 import 'source-map-support/register';
 
-import { getProductsMock } from '@libs/s3';
+import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import { Client } from 'pg';
+import { dbOptions } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { Product } from '@models/product';
+import { ProductWithStock } from '@models/product';
 
-const getProductsList = async () => {
+const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+  console.info(event);
+  const client = new Client(dbOptions);
+
   try {
-    const json = await getProductsMock();
-    const products = JSON.parse(json) as { data: Product[] };
+    await client.connect();
+
+    const products = await client.query<ProductWithStock>(
+      `SELECT id, title, description, price, count
+      FROM products
+      LEFT JOIN stocks ON products.id = stocks.product_id`,
+    );
 
     return formatJSONResponse({
-      data: products?.data,
+      data: products.rows,
     });
   } catch (error) {
-    return error;
+    return formatJSONResponse(error, 500);
+  } finally {
+    client.end();
   }
 };
 
