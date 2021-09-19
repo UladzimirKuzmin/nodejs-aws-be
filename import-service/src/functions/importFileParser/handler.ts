@@ -1,16 +1,33 @@
 import 'source-map-support/register';
 
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
-import { formatJSONResponse } from '@libs/apiGateway';
+import type { S3Handler } from 'aws-lambda';
+import * as csvParser from 'csv-parser';
+import * as util from 'util';
+import * as stream from 'stream';
 import { middyfy } from '@libs/lambda';
-// import { getReadableStream } from '@libs/s3';
+import { getReadableStream, getCopyObject } from '@libs/s3';
 
-const importFileParser: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+const finished = util.promisify(stream.finished);
+
+const importFileParser: S3Handler = async (event) => {
   console.log(event);
 
-  return formatJSONResponse({
-    message: 'Import File parser',
-    event,
+  event.Records.forEach(async (record) => {
+    const results = [];
+    const s3Stream = await getReadableStream(record.s3.object.key);
+
+    await finished(
+      s3Stream
+        .pipe(csvParser())
+        .on('data', (data) => {
+          console.log(data);
+          results.push(data);
+        })
+        .on('end', async () => {
+          await getCopyObject(record.s3.object.key);
+          console.log('Copied to parsed folder');
+        }),
+    );
   });
 };
 

@@ -1,11 +1,11 @@
 import 'source-map-support/register';
 
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getSignedUrl } from '@libs/s3';
 
-const importProductsFile: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+const importProductsFile: APIGatewayProxyHandler = async (event) => {
   console.log(event);
 
   const filename = event.queryStringParameters?.name;

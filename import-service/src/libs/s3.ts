@@ -14,11 +14,9 @@ export const getList = async () => {
   }
 };
 
-export const getReadableStream = async (filename: string) => {
+export const getReadableStream = async (key: string) => {
   try {
-    return await s3
-      .getObject({ Bucket: 'nodejs-aws-be-import', Key: `uploaded/${filename}` })
-      .createReadStream();
+    return await s3.getObject({ Bucket: 'nodejs-aws-be-import', Key: key }).createReadStream();
   } catch (error) {
     throw new Error(error);
   }
@@ -32,6 +30,20 @@ export const getSignedUrl = async (filename: string) => {
       ContentType: 'text/csv',
       Expires: 60,
     });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getCopyObject = async (key: string) => {
+  try {
+    return await s3
+      .copyObject({
+        Bucket: 'nodejs-aws-be-import',
+        CopySource: `nodejs-aws-be-import/${key}`,
+        Key: key.replace('uploaded', 'parsed'),
+      })
+      .promise();
   } catch (error) {
     throw new Error(error);
   }
