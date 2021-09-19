@@ -29,6 +29,7 @@ export const getSignedUrl = async (filename: string) => {
     return await s3.getSignedUrlPromise('putObject', {
       Bucket: 'nodejs-aws-be-import',
       Key: `uploaded/${filename}`,
+      ContentType: 'text/csv',
       Expires: 60,
     });
   } catch (error) {
