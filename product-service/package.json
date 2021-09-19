@@ -15,8 +15,6 @@
     "@middy/http-cors": "^2.5.1",
     "@middy/http-json-body-parser": "^2.5.1",
     "aws-sdk": "^2.973.0",
-    "csv-parser": "^3.0.0",
-    "dotenv": "^10.0.0",
     "pg": "^8.7.1",
     "source-map-support": "^0.5.19"
   },
