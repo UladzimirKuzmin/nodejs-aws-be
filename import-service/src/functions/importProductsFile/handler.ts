@@ -2,10 +2,20 @@ import 'source-map-support/register';
 
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
+import { getList, getReadableStream } from '@libs/s3';
 
 const importProductsFile = async (event) => {
+  console.log(event);
+  const fileName = event.queryStringParameters?.name;
+
+  const files = await getList();
+
+  const stream = await getReadableStream(fileName);
+
+  console.log(files, stream);
+
   return formatJSONResponse({
-    message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
+    message: `It works`,
     event,
   });
 };

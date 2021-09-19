@@ -8,6 +8,13 @@ export default {
         method: 'get',
         path: 'import',
         cors: true,
+        request: {
+          parameters: {
+            querystrings: {
+              name: true,
+            },
+          },
+        },
       },
     },
   ],
