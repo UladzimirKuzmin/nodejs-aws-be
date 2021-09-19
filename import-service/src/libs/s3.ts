@@ -23,3 +23,15 @@ export const getReadableStream = async (filename: string) => {
     return error;
   }
 };
+
+export const getSignedUrl = async (filename: string) => {
+  try {
+    return await s3.getSignedUrlPromise('putObject', {
+      Bucket: 'nodejs-aws-be-import',
+      Key: `uploaded/${filename}`,
+      Expires: 60,
+    });
+  } catch (error) {
+    return error;
+  }
+};
