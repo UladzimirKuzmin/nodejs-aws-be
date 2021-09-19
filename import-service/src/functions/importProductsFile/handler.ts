@@ -10,7 +10,7 @@ const importProductsFile = async (event) => {
   const signedUrl = await getSignedUrl(filename);
 
   return formatJSONResponse({
-    data: signedUrl,
+    url: signedUrl,
   });
 };
 
