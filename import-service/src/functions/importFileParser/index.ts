@@ -5,7 +5,7 @@ export default {
   events: [
     {
       s3: {
-        bucket: process.env.BUCKET_NAME,
+        bucket: 'nodejs-aws-be-import',
         event: 's3:ObjectCreated:*',
         rules: [
           {
