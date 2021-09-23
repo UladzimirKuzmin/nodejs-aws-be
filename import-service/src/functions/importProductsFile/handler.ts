@@ -7,17 +7,14 @@ import { getSignedUrl } from '@libs/s3';
 
 const importProductsFile: APIGatewayProxyHandler = async (event) => {
   console.log(event);
-
   const filename = event.queryStringParameters?.name;
-  let url: string;
 
   try {
-    url = await getSignedUrl(filename);
+    const url = await getSignedUrl(filename);
+    return formatJSONResponse({ url });
   } catch (error) {
     return formatJSONResponse(error, 500);
   }
-
-  return formatJSONResponse({ url });
 };
 
 export const main = middyfy(importProductsFile);
