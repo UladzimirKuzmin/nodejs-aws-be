@@ -5,7 +5,7 @@ import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { getSignedUrl } from '@libs/s3';
 
-const importProductsFile: APIGatewayProxyHandler = async (event) => {
+export const importProductsFile: APIGatewayProxyHandler = async (event) => {
   console.log(event);
   const filename = event.queryStringParameters?.name;
 

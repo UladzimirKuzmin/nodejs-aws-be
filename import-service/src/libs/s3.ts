@@ -48,3 +48,16 @@ export const getCopyObject = async (key: string) => {
     throw new Error(error);
   }
 };
+
+export const getDeleteObject = async (key: string) => {
+  try {
+    return await s3
+      .deleteObject({
+        Bucket: 'nodejs-aws-be-import',
+        Key: key,
+      })
+      .promise();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
