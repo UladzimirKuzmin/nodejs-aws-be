@@ -13,7 +13,7 @@ export const importProductsFile: APIGatewayProxyHandler = async (event) => {
     const url = await getSignedUrl(filename);
     return formatJSONResponse({ url });
   } catch (error) {
-    return formatJSONResponse(error, 500);
+    return formatJSONResponse({ message: error.message }, 500);
   }
 };
 

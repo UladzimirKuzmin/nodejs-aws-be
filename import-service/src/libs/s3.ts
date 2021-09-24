@@ -10,7 +10,7 @@ export const getList = async () => {
       .listObjectsV2({ Bucket: 'nodejs-aws-be-import', Prefix: 'uploaded', Delimiter: '/' })
       .promise();
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -18,7 +18,7 @@ export const getReadableStream = async (key: string) => {
   try {
     return await s3.getObject({ Bucket: 'nodejs-aws-be-import', Key: key }).createReadStream();
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -31,7 +31,7 @@ export const getSignedUrl = async (filename: string) => {
       Expires: 60,
     });
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
@@ -45,7 +45,7 @@ export const getCopyObject = async (key: string) => {
       })
       .promise();
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
 
