@@ -19,6 +19,7 @@ describe('importProductsFile', () => {
   beforeAll(() => {
     mockedS3 = new S3() as any;
   });
+
   test('returns pre-signed url', async () => {
     mockedS3.getSignedUrlPromise.mockResolvedValue('https://example.com');
     const result = await importProductsFile(event, ctx, callback);
