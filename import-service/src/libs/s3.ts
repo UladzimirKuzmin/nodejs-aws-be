@@ -58,6 +58,6 @@ export const getDeleteObject = async (key: string) => {
       })
       .promise();
   } catch (error) {
-    throw new Error(error);
+    throw error;
   }
 };
