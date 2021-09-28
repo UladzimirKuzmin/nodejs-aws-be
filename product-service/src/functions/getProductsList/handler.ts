@@ -1,13 +1,13 @@
 import 'source-map-support/register';
 
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
+import type { APIGatewayProxyHandler } from 'aws-lambda';
 import { Client } from 'pg';
 import { dbOptions } from '@libs/db';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { ProductWithStock } from '@models/product';
 
-const getProductsList: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+const getProductsList: APIGatewayProxyHandler = async (event) => {
   console.info(event);
   const client = new Client(dbOptions);
 
