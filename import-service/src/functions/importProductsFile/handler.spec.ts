@@ -31,9 +31,7 @@ describe('importProductsFile', () => {
   });
 
   test('returns internal error', async () => {
-    mockedS3.getSignedUrlPromise.mockImplementation(() => {
-      throw new Error('Test error');
-    });
+    mockedS3.getSignedUrlPromise.mockRejectedValue(new Error('Test error'));
     const result = await importProductsFile(event, ctx, callback);
     expect(result).toEqual({
       statusCode: 500,
