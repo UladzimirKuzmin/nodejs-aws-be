@@ -12,6 +12,7 @@ const serverlessConfiguration: AWS = {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
+      excludeFiles: '**/*.spec.ts',
     },
   },
   useDotenv: true,
@@ -33,7 +34,35 @@ const serverlessConfiguration: AWS = {
       PG_USERNAME: '${env:PG_USERNAME}',
       PG_PASSWORD: '${env:PG_PASSWORD}',
     },
+    iamRoleStatements: [
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: [
+          {
+            'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+          },
+        ],
+      },
+    ],
     lambdaHashingVersion: '20201221',
+  },
+  resources: {
+    Resources: {
+      catalogItemsQueue: {
+        Type: 'AWS::SQS::Queue',
+        Properties: {
+          QueueName: 'product-service-catalog-batch-process',
+        },
+      },
+    },
+    Outputs: {
+      SQSURL: {
+        Value: {
+          Ref: 'catalogItemsQueue',
+        },
+      },
+    },
   },
   functions: { getProductsList, getProductById, postProduct, catalogBatchProcess },
 };

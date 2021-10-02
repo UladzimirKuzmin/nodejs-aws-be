@@ -26,9 +26,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      SQS_URL: {
-        Ref: 'catalogItemsQueue',
-      },
+      SQS_URL: '${cf:product-service-dev.SQSURL}',
     },
     iamRoleStatements: [
       {
@@ -41,27 +39,8 @@ const serverlessConfiguration: AWS = {
         Action: ['s3:*'],
         Resource: 'arn:aws:s3:::nodejs-aws-be-import/*',
       },
-      {
-        Effect: 'Allow',
-        Action: ['sqs:*'],
-        Resource: [
-          {
-            'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
-          },
-        ],
-      },
     ],
     lambdaHashingVersion: '20201221',
-  },
-  resources: {
-    Resources: {
-      catalogItemsQueue: {
-        Type: 'AWS::SQS::Queue',
-        Properties: {
-          QueueName: 'product-service-catalog-batch-process',
-        },
-      },
-    },
   },
   functions: { importProductsFile, importFileParser },
 };
