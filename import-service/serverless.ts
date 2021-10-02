@@ -58,7 +58,7 @@ const serverlessConfiguration: AWS = {
       catalogItemsQueue: {
         Type: 'AWS::SQS::Queue',
         Properties: {
-          QueueName: 'import-service-catalog-batch-process',
+          QueueName: 'product-service-catalog-batch-process',
         },
       },
     },

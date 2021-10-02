@@ -10,7 +10,7 @@ import { ProductWithStock } from '@models/product';
 
 const postProduct: APIGatewayProxyHandler = async (event) => {
   console.info(event);
-  const { title, description, price, count } = event.body as ProductWithStock;
+  const { title, description, price, count } = event.body as unknown as ProductWithStock;
   const { error } = validate({ title, description, price, count } as ProductWithStock);
 
   if (error) {
