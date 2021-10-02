@@ -2,7 +2,6 @@ import type { AWS } from '@serverless/typescript';
 
 import importProductsFile from '@functions/importProductsFile';
 import importFileParser from '@functions/importFileParser';
-import catalogBatchProcess from '@functions/catalogBatchProcess';
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -11,6 +10,7 @@ const serverlessConfiguration: AWS = {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
+      excludeFiles: '**/*.spec.ts',
     },
   },
   useDotenv: true,
@@ -46,7 +46,7 @@ const serverlessConfiguration: AWS = {
         Action: ['sqs:*'],
         Resource: [
           {
-            'Fn:GetAtt': ['catalogItemsQueue', 'Arn'],
+            'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
           },
         ],
       },
@@ -63,7 +63,7 @@ const serverlessConfiguration: AWS = {
       },
     },
   },
-  functions: { importProductsFile, importFileParser, catalogBatchProcess },
+  functions: { importProductsFile, importFileParser },
 };
 
 module.exports = serverlessConfiguration;
