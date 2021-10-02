@@ -2,8 +2,8 @@ import 'source-map-support/register';
 
 import { middyfy } from '@libs/lambda';
 
-const importFileParser = async (event) => {
+const catalogBatchProcess = async (event) => {
   console.log(event);
 };
 
-export const main = middyfy(importFileParser);
+export const main = middyfy(catalogBatchProcess);
