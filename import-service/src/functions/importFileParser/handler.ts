@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import { SQS } from 'aws-sdk';
+import { SQS, config } from 'aws-sdk';
 import type { S3Handler } from 'aws-lambda';
 import * as csvParser from 'csv-parser';
 import * as util from 'util';
@@ -8,7 +8,8 @@ import * as stream from 'stream';
 import { middyfy } from '@libs/lambda';
 import { getReadableStream, getCopyObject, getDeleteObject } from '@libs/s3';
 
-const sqs = new SQS();
+config.update({ region: 'eu-west-1' });
+const sqs = new SQS({ region: 'eu-west-1' });
 
 const finished = util.promisify(stream.finished);
 
