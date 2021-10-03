@@ -38,11 +38,9 @@ const serverlessConfiguration: AWS = {
       {
         Effect: 'Allow',
         Action: ['sqs:*'],
-        Resource: [
-          {
-            'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
-          },
-        ],
+        Resource: {
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+        },
       },
     ],
     lambdaHashingVersion: '20201221',
@@ -57,9 +55,14 @@ const serverlessConfiguration: AWS = {
       },
     },
     Outputs: {
-      SQSURL: {
+      catalogItemsQueueUrl: {
         Value: {
           Ref: 'catalogItemsQueue',
+        },
+      },
+      createProductTopicArn: {
+        Value: {
+          'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
         },
       },
     },
