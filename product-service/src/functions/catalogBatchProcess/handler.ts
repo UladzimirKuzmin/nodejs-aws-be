@@ -6,7 +6,7 @@ import { create } from '@libs/db';
 import { middyfy } from '@libs/lambda';
 import { formatJSONResponse } from '@libs/apiGateway';
 
-const catalogBatchProcess = async (event: SQSEvent) => {
+export const catalogBatchProcess = async (event: SQSEvent) => {
   console.info(event);
 
   const sns = new SNS({ region: 'eu-west-1' });
@@ -15,7 +15,6 @@ const catalogBatchProcess = async (event: SQSEvent) => {
     for (let record of event.Records) {
       const product = JSON.parse(record.body);
       await create(product);
-
       await sns
         .publish({
           Subject: `${product.title} has been created.`,
@@ -33,7 +32,7 @@ const catalogBatchProcess = async (event: SQSEvent) => {
 
     return formatJSONResponse({ message: 'SUCCESS' }, 200);
   } catch (error) {
-    return formatJSONResponse(error, 500);
+    return formatJSONResponse({ message: error.message }, 500);
   }
 };
 
