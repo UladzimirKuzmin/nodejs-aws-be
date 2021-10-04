@@ -33,6 +33,9 @@ const serverlessConfiguration: AWS = {
       PG_DATABASE: '${env:PG_DATABASE}',
       PG_USERNAME: '${env:PG_USERNAME}',
       PG_PASSWORD: '${env:PG_PASSWORD}',
+      SNS_ARN: {
+        Ref: 'createProductTopic',
+      },
     },
     iamRoleStatements: [
       {
@@ -40,6 +43,13 @@ const serverlessConfiguration: AWS = {
         Action: ['sqs:*'],
         Resource: {
           'Fn::GetAtt': ['catalogItemsQueue', 'Arn'],
+        },
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sns:*'],
+        Resource: {
+          Ref: 'createProductTopic',
         },
       },
     ],
@@ -51,6 +61,38 @@ const serverlessConfiguration: AWS = {
         Type: 'AWS::SQS::Queue',
         Properties: {
           QueueName: 'product-service-catalog-batch-process',
+        },
+      },
+      createProductTopic: {
+        Type: 'AWS::SNS::Topic',
+        Properties: {
+          TopicName: 'product-service-create-product-notification',
+        },
+      },
+      createProductTopicLargePrice: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: '${env:LARGE_PRICE_EMAIL}',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'createProductTopic',
+          },
+          FilterPolicy: {
+            price: [{ numeric: ['>', 1000000] }],
+          },
+        },
+      },
+      createProductTopicSmallPrice: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: '${env:SMALL_PRICE_EMAIL}',
+          Protocol: 'email',
+          TopicArn: {
+            Ref: 'createProductTopic',
+          },
+          FilterPolicy: {
+            price: [{ numeric: ['<=', 1000000] }],
+          },
         },
       },
     },
