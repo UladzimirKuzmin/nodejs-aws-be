@@ -23,7 +23,7 @@ export const catalogBatchProcess = async (event: SQSEvent) => {
           MessageAttributes: {
             price: {
               DataType: 'Number',
-              StringValue: `${product.price}`,
+              StringValue: `${Number(product.price)}`,
             },
           },
         })
