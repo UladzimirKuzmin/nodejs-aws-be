@@ -12,7 +12,7 @@ const event = { pathParameters: { id: '1580' } };
 const ctx = {} as Context;
 const callback: Callback = () => {};
 
-describe('getProductsList', () => {
+describe('getProductById', () => {
   (getProductsMock as jest.Mock).mockResolvedValue(JSON.stringify({ data: [mock] }));
 
   test.skip('Returns statusCode 404', async () => {
