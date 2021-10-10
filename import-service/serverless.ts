@@ -10,6 +10,7 @@ const serverlessConfiguration: AWS = {
     webpack: {
       webpackConfig: './webpack.config.js',
       includeModules: true,
+      excludeFiles: '**/*.spec.ts',
     },
   },
   useDotenv: true,
@@ -25,6 +26,7 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      SQS_URL: '${cf:product-service-dev.catalogItemsQueueUrl}',
     },
     iamRoleStatements: [
       {
@@ -36,6 +38,11 @@ const serverlessConfiguration: AWS = {
         Effect: 'Allow',
         Action: ['s3:*'],
         Resource: 'arn:aws:s3:::nodejs-aws-be-import/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: '${cf:product-service-dev.createProductTopicArn}',
       },
     ],
     lambdaHashingVersion: '20201221',
