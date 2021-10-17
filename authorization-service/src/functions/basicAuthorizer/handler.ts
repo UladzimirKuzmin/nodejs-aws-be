@@ -34,7 +34,6 @@ const basicAuthorizer: APIGatewayTokenAuthorizerHandler = (event, _ctx, cb) => {
 
     const storedUserPassword = process.env[username];
     const effect = !storedUserPassword || storedUserPassword !== password ? 'Deny' : 'Allow';
-
     const policy = generatePolicy(encodedCreds, event.methodArn, effect);
 
     cb(null, policy);

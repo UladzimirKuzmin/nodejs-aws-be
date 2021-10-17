@@ -12,8 +12,7 @@ const serverlessConfiguration: AWS = {
       excludeFiles: '**/*.spec.ts',
     },
   },
-  useDotenv: true,
-  plugins: ['serverless-webpack'],
+  plugins: ['serverless-dotenv-plugin', 'serverless-webpack'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',

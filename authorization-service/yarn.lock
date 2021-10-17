@@ -5668,6 +5668,15 @@ serialize-javascript@^6.0.0:
   dependencies:
     randombytes "^2.1.0"
 
+serverless-dotenv-plugin@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/serverless-dotenv-plugin/-/serverless-dotenv-plugin-3.10.0.tgz#6a41dddef7fafd249ed04eeb11be7d1fafc692d8"
+  integrity sha512-u4/Yh/61alhkd3d/aF2+wNwRGgGgrN1KpMz8IhwsMNS0AsoJDhmRl/BTuDqHCCdYcteQw9d4crgEIGVPDlc8jw==
+  dependencies:
+    chalk "^4.1.2"
+    dotenv "^10.0.0"
+    dotenv-expand "^5.1.0"
+
 serverless-webpack@^5.3.5:
   version "5.5.4"
   resolved "https://registry.yarnpkg.com/serverless-webpack/-/serverless-webpack-5.5.4.tgz#45d44c4b1908458e20914e97d1c630d9a884ca7a"
