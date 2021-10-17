@@ -1,7 +1,24 @@
 import type { AWS } from '@serverless/typescript';
+import type { GatewayResponseType } from 'aws-sdk/clients/apigateway';
 
 import importProductsFile from '@functions/importProductsFile';
 import importFileParser from '@functions/importFileParser';
+
+const enableGatewayResponseCors = (responseType: GatewayResponseType) => {
+  return {
+    Type: 'AWS::ApiGateway::GatewayResponse',
+    Properties: {
+      RestApiId: {
+        Ref: 'ApiGatewayRestApi',
+      },
+      ResponseParameters: {
+        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+      },
+      ResponseType: responseType,
+    },
+  };
+};
 
 const serverlessConfiguration: AWS = {
   service: 'import-service',
@@ -48,6 +65,20 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   functions: { importProductsFile, importFileParser },
+  resources: {
+    Resources: {
+      ApiGatewayRestApi: {
+        Type: 'AWS::ApiGateway::RestApi',
+        Properties: {
+          Name: {
+            'Fn::Sub': '${AWS::StackName}',
+          },
+        },
+      },
+      ResponseUnauthorized: enableGatewayResponseCors('UNAUTHORIZED'),
+      ResponseAccessDenied: enableGatewayResponseCors('ACCESS_DENIED'),
+    },
+  },
 };
 
 module.exports = serverlessConfiguration;
