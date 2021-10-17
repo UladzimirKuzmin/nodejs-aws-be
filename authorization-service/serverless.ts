@@ -28,6 +28,18 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
+  resources: {
+    Resources: {},
+    Outputs: {
+      BasicAuthorizerLambdaFunctionQualifiedArn: {
+        Export: {
+          Name: {
+            'Fn::Sub': '${AWS::StackName}-BasicAuthorizerArn',
+          },
+        },
+      },
+    },
+  },
   functions: { basicAuthorizer },
 };
 
