@@ -23,6 +23,7 @@ export class AppService {
     recipientServiceName: string,
     originalUrl: string,
     method: string,
+    body: any,
   ): Promise<any> {
     try {
       const recipientUrl = await this.configService.get(recipientServiceName);
@@ -36,6 +37,7 @@ export class AppService {
       const { data } = await this.httpService.axiosRef({
         url: `${recipientUrl}${originalUrl}`,
         method: method as Method,
+        ...(Object.keys(body).length > 0 && { data: body }),
       });
 
       if (method === 'GET') {
