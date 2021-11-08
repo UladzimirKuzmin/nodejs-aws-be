@@ -25,15 +25,15 @@ export class AppService {
     method: string,
     body: any,
   ): Promise<any> {
+    const recipientUrl = await this.configService.get(recipientServiceName);
+
+    console.log(recipientUrl);
+
+    if (!recipientUrl) {
+      throw new BadGatewayException('Cannot process request');
+    }
+
     try {
-      const recipientUrl = await this.configService.get(recipientServiceName);
-
-      console.log(recipientUrl);
-
-      if (!recipientUrl) {
-        throw new BadGatewayException('Cannot process request');
-      }
-
       const { data } = await this.httpService.axiosRef({
         url: `${recipientUrl}${originalUrl}`,
         method: method as Method,
@@ -66,15 +66,15 @@ export class AppService {
     method: string,
     body: any,
   ): Promise<any> {
+    const recipientUrl = await this.configService.get(recipientServiceName);
+
+    console.log(recipientUrl);
+
+    if (!recipientUrl) {
+      throw new BadGatewayException('Cannot process request');
+    }
+
     try {
-      const recipientUrl = await this.configService.get(recipientServiceName);
-
-      console.log(recipientUrl);
-
-      if (!recipientUrl) {
-        throw new BadGatewayException('Cannot process request');
-      }
-
       const { data } = await this.httpService.axiosRef({
         url: `${recipientUrl}${originalUrl}`,
         method: method as Method,
