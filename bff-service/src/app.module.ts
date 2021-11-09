@@ -11,7 +11,7 @@ import { AppService } from './app.service';
     CacheModule.register({ ttl: 120 }),
     HttpModule,
   ],
-  controllers: [CartController, ProductsController],
+  controllers: [ProductsController, CartController],
   providers: [AppService],
 })
 export class AppModule {}
